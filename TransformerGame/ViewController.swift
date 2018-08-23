@@ -21,22 +21,16 @@ class ViewController: UIViewController
     var isGameOver: Bool = false {
         didSet {
             self.playButton.isEnabled = !isGameOver
+            if isGameOver {
+                self.displayWinningTeam()
+                self.displaySurvivingMeembersOfLosingTeam()
+            }
         }
     }
     
     var numOfBattles = 0 {
         didSet {
             self.numberOfBattlesLabel.text = "\(numOfBattles)"
-            
-        }
-    }
-    var winningTeam: String {
-        if teamAutobot.numOfKilled < teamDeception.numOfKilled {
-            return teamAutobot.team.rawValue
-        } else if teamAutobot.numOfKilled > teamDeception.numOfKilled {
-            return teamDeception.team.rawValue
-        } else {
-            return "equal"
         }
     }
     
@@ -48,26 +42,68 @@ class ViewController: UIViewController
     
     private func setupTeams() {
         let a1 = Transformer(name: "A1",
-                             specs: TransformerSpecs(strength:7, intelligence: 4, speed: 4, endurance: 4, rank: 4, courage: 7, firepower: 4, skill: 6),
+                             specs: TransformerSpecs(strength:7,
+                                                     intelligence: 4,
+                                                     speed: 4,
+                                                     endurance: 4,
+                                                     rank: 4,
+                                                     courage: 7,
+                                                     firepower: 4,
+                                                     skill: 6),
                              transformerType: TransformerType.autobot)
         let a2 = Transformer(name: "Optimus Prime",
-                             specs: TransformerSpecs(strength: 2, intelligence: 3, speed: 4, endurance: 5, rank: 6, courage: 7, firepower: 8, skill: 9),
+                             specs: TransformerSpecs(strength: 2,
+                                                     intelligence: 3,
+                                                     speed: 4,
+                                                     endurance: 5,
+                                                     rank: 6,
+                                                     courage: 7,
+                                                     firepower: 8,
+                                                     skill: 9),
                              transformerType: TransformerType.autobot)
         
         let a3 = Transformer(name: "Optimus Prime",
-                             specs: TransformerSpecs(strength: 1, intelligence: 1, speed: 1, endurance: 1, rank: 1, courage: 1, firepower: 1, skill: 1),
+                             specs: TransformerSpecs(strength: 1,
+                                                     intelligence: 1,
+                                                     speed: 1,
+                                                     endurance: 1,
+                                                     rank: 1,
+                                                     courage: 1,
+                                                     firepower: 1,
+                                                     skill: 1),
                              transformerType: TransformerType.autobot)
     
 
-        let d1 = Transformer(name: "Optimus Prime1",
-                             specs: TransformerSpecs(strength: 4, intelligence: 4, speed: 4, endurance: 9, rank: 4, courage: 4, firepower: 4, skill: 4),
+        let d1 = Transformer(name: "Optimus Prime",
+                             specs: TransformerSpecs(strength: 4,
+                                                     intelligence: 4,
+                                                     speed: 4,
+                                                     endurance: 9,
+                                                     rank: 4,
+                                                     courage: 4,
+                                                     firepower: 4,
+                                                     skill: 4),
                              transformerType: TransformerType.autobot)
      
-        let d2 = Transformer(name: "D2",
-                             specs: TransformerSpecs(strength: 2, intelligence: 3, speed: 4, endurance: 5, rank: 4, courage: 7, firepower: 8, skill: 9),
+        let d2 = Transformer(name: "Predaking",
+                             specs: TransformerSpecs(strength: 2,
+                                                     intelligence: 3,
+                                                     speed: 4,
+                                                     endurance: 5,
+                                                     rank: 4,
+                                                     courage: 7,
+                                                     firepower: 8,
+                                                     skill: 9),
                              transformerType: TransformerType.autobot)
         let d3 = Transformer(name: "D3",
-                             specs: TransformerSpecs(strength: 2, intelligence: 3, speed: 4, endurance: 1, rank: 4, courage: 7, firepower: 8, skill: 9),
+                             specs: TransformerSpecs(strength: 2,
+                                                     intelligence: 3,
+                                                     speed: 4,
+                                                     endurance: 1,
+                                                     rank: 4,
+                                                     courage: 7,
+                                                     firepower: 8,
+                                                     skill: 9),
                              transformerType: TransformerType.autobot)
       
         teamAutobot.enrollTeamMembers(memebers: [a1, a2, a3])
@@ -86,8 +122,31 @@ class ViewController: UIViewController
         
     }
     
-    private func displayLosingTeamSurvivingMembers() {
+    private func displayWinningTeam() {
         
+        if teamAutobot.gameResult == GameResult.win {
+            self.winingTeamLabel.text = teamAutobot.team.rawValue
+        } else if teamDeception.gameResult == GameResult.win {
+            self.winingTeamLabel.text = teamDeception.team.rawValue
+        } else {
+            self.winingTeamLabel.text = "equal"
+        }
+    }
+    
+    private func displaySurvivingMeembersOfLosingTeam() {
+        var survivingMembers = [Transformer]()
+        if teamAutobot.gameResult == GameResult.lose {
+            survivingMembers = teamAutobot.survivingMembers
+        } else if teamDeception.gameResult == GameResult.lose {
+            survivingMembers = teamDeception.survivingMembers
+        }
+        if survivingMembers.count > 0 {
+            survivingMembers.forEach { (item) in
+                self.survivingMemebersTextView.text.append(item.name + "\r\n")
+            }
+        } else {
+            self.survivingMemebersTextView.text.append("Not Available")
+        }
     }
     
 }
