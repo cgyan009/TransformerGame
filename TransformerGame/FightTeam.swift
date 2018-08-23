@@ -3,7 +3,7 @@
 //  TransformerGame
 //
 //  Created by Chenguo Yan on 2018-08-22.
-//  Copyright © 2018 Chenguo Yan. All rights reserved.
+//  Copyright © 2018 Frank Yan. All rights reserved.
 //
 
 import UIKit
@@ -17,16 +17,14 @@ enum GameResult {
 
 class FightTeam: NSObject
 {
-    
     var team: TransformerType
-    var transformers = [Transformer]()
+    var transformers = [Transformer]() //the members of the team
     
     var sortedTransformers: [Transformer] {
         return self.transformers.sorted{ $0.specs.overallRating > $1.specs.overallRating }
     }
     
     var gameResult: GameResult = GameResult.notPlayed
-    
     var numOfKilled: Int {
         return self.transformers.filter{ $0.isKilled == true}.count
     }
@@ -43,6 +41,7 @@ class FightTeam: NSObject
     private func killAll() {
         self.transformers.forEach { $0.isKilled = true }
     }
+    //fight with opponent team
     func playGame(with opponentTeam: FightTeam, numOfBattles: inout Int)
     {
         var index = 0
@@ -54,6 +53,8 @@ class FightTeam: NSObject
             if index > upperBoundary  {
                 break
             }
+            //if the fighters named "Optimus Prime" or "Predaking" met, then gaveover
+            //kill all fighters
             if superNames.contains(transformer.name) &&
                 superNames.contains(opponentTeam.sortedTransformers[index].name)
             {
@@ -64,10 +65,10 @@ class FightTeam: NSObject
                 return
             }
             transformer.fight(with: opponentTeam.sortedTransformers[index])
-            print("Overall Rating: \(transformer.specs.overallRating),\(transformer.isKilled) ----\(opponentTeam.sortedTransformers[index].specs.overallRating) \(opponentTeam.sortedTransformers[index].isKilled)")
             index += 1
             numOfBattles += 1
         }
+        //judge the game result
         if self.numOfKilled > opponentTeam.numOfKilled {
             self.gameResult = GameResult.lose
             opponentTeam.gameResult = GameResult.win
@@ -79,5 +80,4 @@ class FightTeam: NSObject
             opponentTeam.gameResult = GameResult.equal
         }
     }
-
 }

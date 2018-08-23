@@ -2,14 +2,14 @@
 //  Transformer.swift
 //  TransformerGame
 //
-//  Created by Chenguo Yan on 2018-08-22.
-//  Copyright © 2018 Chenguo Yan. All rights reserved.
+//  Created by Frank Yan on 2018-08-22.
+//  Copyright © 2018 Frank Yan. All rights reserved.
 //
 
 import Foundation
 
-struct TransformerSpecs {
-    
+struct TransformerSpecs
+{
     private let minVal = 1
     private let maxVal = 10
     
@@ -57,7 +57,7 @@ struct TransformerSpecs {
          courage: Int,
          firepower: Int,
          skill: Int) {
-        
+        //specs can only be 1-10
         self._courage = min(max(courage, minVal), maxVal)
         self._endurance = min(max(endurance, minVal), maxVal)
         self._firepower = min(max(firepower, minVal), maxVal)
@@ -67,8 +67,6 @@ struct TransformerSpecs {
         self._speed = min(max(speed, minVal), maxVal)
         self._strength = min(max(strength, minVal), maxVal)
     }
-    
-    
 }
 enum TransformerType: String {
     case autobot = "Autobot"
@@ -87,10 +85,11 @@ class Transformer : NSObject
         self.transformerType = transformerType
         self.specs = specs
     }
-    func fight(with opponent: Transformer) {
-        
+    //2 transforms fight with each other
+    func fight(with opponent: Transformer)
+    {
+        //with these names are super strong
         let superNames = ["Optimus Prime", "Predaking"]
-        
         if superNames.contains(self.name) && !superNames.contains(opponent.name) {
             opponent.isKilled = true
             return
@@ -106,46 +105,29 @@ class Transformer : NSObject
         if courageDown >= 4 && strengthDown >= 3 {
             opponent.isKilled = true
             return
-        }
-        if courageDown <= -4 && strengthDown <= -3 {
+        } else if courageDown <= -4 && strengthDown <= -3 {
             self.isKilled = true
             return
         }
-        let skillDif = self.specs.skill - opponent.specs.skill
         
+        let skillDif = self.specs.skill - opponent.specs.skill
         if skillDif >= 3 {
             opponent.isKilled = true
             return
-        }
-        if skillDif <= -3 {
+        } else if skillDif <= -3 {
             self.isKilled = true
             return
         }
+        
         if self.specs.overallRating > opponent.specs.overallRating {
             opponent.isKilled = true
             return
         } else if self.specs.overallRating < opponent.specs.overallRating {
             self.isKilled = true
             return
-        }
-        let intelligenceDif = self.specs.intelligence - opponent.specs.intelligence
-        let speedDif = self.specs.speed - opponent.specs.speed
-        let enduranceDif = self.specs.endurance - opponent.specs.endurance
-        let rankDif = self.specs.rank - opponent.specs.rank
-        let firepowerDif = self.specs.firepower - opponent.specs.firepower
-        
-        if courageDown == 0
-            && strengthDown == 0
-            && skillDif == 0
-            && intelligenceDif == 0
-            && speedDif == 0
-            && enduranceDif == 0
-            && rankDif == 0
-            && firepowerDif == 0 {
+        } else {
             self.isKilled = true
             opponent.isKilled = true
         }
-        
     }
-    
 }
