@@ -114,6 +114,7 @@
                     </view>
                     <connections>
                         <outlet property="numberOfBattlesLabel" destination="8aQ-EA-X6E" id="NDV-3f-je7"/>
+                        <outlet property="playButton" destination="VoX-jJ-tqE" id="tCc-xE-pHP"/>
                         <outlet property="survivingMemebersTextView" destination="HQs-6H-mxy" id="Rhc-ZD-M2C"/>
                         <outlet property="winingTeamLabel" destination="C2u-Yj-Qtc" id="lg3-11-dPb"/>
                     </connections>
